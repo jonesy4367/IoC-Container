@@ -23,5 +23,10 @@ namespace IocContainer
 
             Bindings.Add(typeof (TBindTo), boundImplementation);
         }
+
+        //public T Resolve<T>()
+        //{
+        //    return null;
+        //}
     }
 }
