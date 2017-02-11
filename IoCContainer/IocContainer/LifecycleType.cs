@@ -2,6 +2,7 @@
 {
     public enum LifecycleType
     {
-        Transient
+        Transient,
+        Singleton
     }
 }

@@ -7,8 +7,16 @@ namespace IoCContainer
 {
     public class Container
     {
-        private readonly Dictionary<Type, BoundImplementation> _bindings = new Dictionary<Type, BoundImplementation>();
-        private static readonly TransientInstanceFactory TransientInstanceFactory = new TransientInstanceFactory();
+        private readonly Dictionary<Type, BoundImplementation> _bindings;
+        private readonly TransientInstanceFactory _transientInstanceFactory;
+        private readonly SingletonInstanceFactory _singletonInstanceFactory;
+
+        public Container()
+        {
+            _bindings = new Dictionary<Type, BoundImplementation>();
+            _transientInstanceFactory = new TransientInstanceFactory();
+            _singletonInstanceFactory = new SingletonInstanceFactory();
+        }
 
         public void Register<TBindTo, TBindFrom>() where TBindFrom : TBindTo
         {
@@ -22,7 +30,10 @@ namespace IoCContainer
             switch (lifecycleType)
             {
                 case LifecycleType.Transient:
-                    instanceFactory = TransientInstanceFactory;
+                    instanceFactory = _transientInstanceFactory;
+                    break;
+                case LifecycleType.Singleton:
+                    instanceFactory = _singletonInstanceFactory;
                     break;
                 // TODO: handle this better
                 default:

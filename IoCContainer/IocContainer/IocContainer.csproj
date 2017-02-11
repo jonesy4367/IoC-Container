@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoundImplementation.cs" />
+    <Compile Include="InstanceFactories\SingletonInstanceFactory.cs" />
     <Compile Include="InstanceFactories\TransientInstanceFactory.cs" />
     <Compile Include="Interfaces\IInstanceFactory.cs" />
     <Compile Include="Container.cs" />

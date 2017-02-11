@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IoCContainer.Interfaces;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace IoCContainer.Test
 {
@@ -26,12 +20,6 @@ namespace IoCContainer.Test
         [Test]
         public void Resolve_DefaultLifeCycleParameterlessConstructor_ReturnsInstance()
         {
-            Resolve_TransientLifeCycleParameterlessConstructor_ReturnsInstance();
-        }
-
-        [Test]
-        public void Resolve_TransientLifeCycleParameterlessConstructor_ReturnsInstance()
-        {
             // Arrange
             _iocContainer.Register<IBoundTo, ParameterlessTarget>();
 
@@ -43,6 +31,33 @@ namespace IoCContainer.Test
             Assert.IsInstanceOf<ParameterlessTarget>(result1);
             Assert.IsInstanceOf<ParameterlessTarget>(result2);
             Assert.AreNotSame(result1, result2);
+        }
+
+        [Test]
+        [TestCase(LifecycleType.Transient)]
+        [TestCase(LifecycleType.Singleton)]
+        public void Resolve_ParameterlessConstructor_ReturnsInstance(LifecycleType lifecycleType)
+        {
+            // Arrange
+            _iocContainer.Register<IBoundTo, ParameterlessTarget>(lifecycleType);
+
+            // Act
+            var result1 = _iocContainer.Resolve<IBoundTo>();
+            var result2 = _iocContainer.Resolve<IBoundTo>();
+
+            // Assert
+            Assert.IsInstanceOf<ParameterlessTarget>(result1);
+            Assert.IsInstanceOf<ParameterlessTarget>(result2);
+
+            switch (lifecycleType)
+            {
+                case LifecycleType.Transient:
+                    Assert.AreNotSame(result1, result2);
+                    break;
+                case LifecycleType.Singleton:
+                    Assert.AreSame(result1, result2);
+                    break;
+            }
         }
     }
 }
