@@ -1,33 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using IoCContainer.InstanceFactories;
+using IoCContainer.Interfaces;
 
 namespace IoCContainer
 {
     public class Container
     {
-        //private static readonly Dictionary<Type, Delegate> test;
-
-        private static readonly Dictionary<Type, BoundImplementation> Bindings = new Dictionary<Type, BoundImplementation>();
+        private readonly Dictionary<Type, BoundImplementation> _bindings = new Dictionary<Type, BoundImplementation>();
         private static readonly TransientInstanceFactory TransientInstanceFactory = new TransientInstanceFactory();
 
         public void Register<TBindTo, TBindFrom>() where TBindFrom : TBindTo
         {
-            //var d = Delegate.CreateDelegate(typeof(TBindFrom), TransientInstanceFactory.BuildInstance)
-        
+            Register<TBindTo, TBindFrom>(LifecycleType.Transient);
+        }
+
+        public void Register<TBindTo, TBindFrom>(LifecycleType lifecycleType) where TBindFrom : TBindTo
+        {
+            IInstanceFactory instanceFactory;
+
+            switch (lifecycleType)
+            {
+                case LifecycleType.Transient:
+                    instanceFactory = TransientInstanceFactory;
+                    break;
+                // TODO: handle this better
+                default:
+                    throw new Exception();
+            }
+
             var boundImplementation = new BoundImplementation
             {
-                Type = typeof (TBindFrom),
-                InstanceFactory = TransientInstanceFactory
+                Type = typeof(TBindFrom),
+                InstanceFactory = instanceFactory
             };
 
-            Bindings.Add(typeof (TBindTo), boundImplementation);
+            _bindings.Add(typeof(TBindTo), boundImplementation);
         }
 
         public T Resolve<T>() where T : class
         {
             var bindToType = typeof (T);
-            var boundImplementation = Bindings[bindToType];
+            var boundImplementation = _bindings[bindToType];
             var boundType = boundImplementation.Type;
             var instanceFactory = boundImplementation.InstanceFactory;
 

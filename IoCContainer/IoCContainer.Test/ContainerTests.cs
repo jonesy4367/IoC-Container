@@ -21,20 +21,28 @@ namespace IoCContainer.Test
         public void Setup()
         {
             _iocContainer = new Container();
-            
         }
 
         [Test]
         public void Resolve_DefaultLifeCycleParameterlessConstructor_ReturnsInstance()
         {
+            Resolve_TransientLifeCycleParameterlessConstructor_ReturnsInstance();
+        }
+
+        [Test]
+        public void Resolve_TransientLifeCycleParameterlessConstructor_ReturnsInstance()
+        {
             // Arrange
             _iocContainer.Register<IBoundTo, ParameterlessTarget>();
 
             // Act
-            var result = _iocContainer.Resolve<IBoundTo>();
+            var result1 = _iocContainer.Resolve<IBoundTo>();
+            var result2 = _iocContainer.Resolve<IBoundTo>();
 
             // Assert
-            Assert.IsInstanceOf<ParameterlessTarget>(result);
+            Assert.IsInstanceOf<ParameterlessTarget>(result1);
+            Assert.IsInstanceOf<ParameterlessTarget>(result2);
+            Assert.AreNotSame(result1, result2);
         }
     }
 }
