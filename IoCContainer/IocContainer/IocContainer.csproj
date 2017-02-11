@@ -41,9 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoundImplementation.cs" />
-    <Compile Include="InstanceFactories\SingletonInstanceFactory.cs" />
-    <Compile Include="InstanceFactories\TransientInstanceFactory.cs" />
-    <Compile Include="Interfaces\IInstanceFactory.cs" />
+    <Compile Include="InstanceBuilderFactories\IInstanceBuilderFactory.cs" />
+    <Compile Include="InstanceBuilderFactories\InstanceBuilderFactory.cs" />
+    <Compile Include="InstanceBuilders\SingletonInstanceBuilder.cs" />
+    <Compile Include="InstanceBuilders\TransientInstanceBuilder.cs" />
+    <Compile Include="InstanceBuilders\IInstanceBuilder.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="LifecycleType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

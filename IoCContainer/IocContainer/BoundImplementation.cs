@@ -1,5 +1,5 @@
 ﻿using System;
-using IoCContainer.Interfaces;
+using IoCContainer.InstanceBuilders;
 
 namespace IoCContainer
 {
@@ -7,6 +7,6 @@ namespace IoCContainer
     {
         public Type Type { get; set; }
 
-        public IInstanceFactory InstanceFactory { get; set; }
+        public IInstanceBuilder InstanceFactory { get; set; }
     }
 }
