@@ -1,7 +1,9 @@
-﻿namespace IocContainer.Interfaces
+﻿using System;
+
+namespace IoCContainer.Interfaces
 {
     public interface IInstanceFactory
     {
-        T BuildInstance<T>();
+        object BuildInstance(Type type);
     }
 }

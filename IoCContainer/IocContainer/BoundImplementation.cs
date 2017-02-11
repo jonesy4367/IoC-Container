@@ -1,7 +1,7 @@
 ﻿using System;
-using IocContainer.Interfaces;
+using IoCContainer.Interfaces;
 
-namespace IocContainer
+namespace IoCContainer
 {
     public class BoundImplementation
     {
