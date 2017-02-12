@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IoCContainer.InstanceBuilderFactories;
 using IoCContainer.InstanceBuilders;
 using NUnit.Framework;
@@ -38,6 +34,22 @@ namespace IoCContainer.Test.InstanceBuilderFactories
 
             // Assert
             Assert.IsInstanceOf<SingletonInstanceBuilder<string>>(result);
+        }
+
+        [Test]
+        public void GetInstanceBuilder_LifeCycleTypeIsNotHandled_ThrowsArgumentException()
+        {
+            // Arrange
+            const LifecycleType lifecycleType = (LifecycleType) 999;
+            var expectedMessage = $"Could not find an InstanceBuilder for {lifecycleType}";
+
+            // Act, Assert
+            var exception = Assert.Throws<ArgumentException>(delegate
+            {
+                _instanceBuilderFactory.GetInstanceBuilder<string>(lifecycleType);
+            });
+
+            Assert.AreEqual(expectedMessage, exception.Message);
         }
     }
 }

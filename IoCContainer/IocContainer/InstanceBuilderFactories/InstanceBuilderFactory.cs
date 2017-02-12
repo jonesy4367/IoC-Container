@@ -14,9 +14,8 @@ namespace IoCContainer.InstanceBuilderFactories
                     return new TransientInstanceBuilder<T>(new InstanceCreator());
                 case LifecycleType.Singleton:
                     return new SingletonInstanceBuilder<T>(new InstanceCreator());
-                // TODO: handle this better
                 default:
-                    throw new Exception();
+                    throw new ArgumentException($"Could not find an InstanceBuilder for {lifecycleType}");
             }
         }
     }
