@@ -30,7 +30,7 @@ namespace IoCContainer.Test
         {
             // Arrange
             var expectedInstanceBuilder =
-                new TransientInstanceBuilder<ClassWithParameterlessConstructor>(It.IsAny<IInstanceCreator>());
+                new TransientInstanceBuilder<ClassWithParameterlessConstructor>(new InstanceCreator());
 
             _instanceBuilderFactory
                 .Setup(i => i.GetInstanceBuilder<ClassWithParameterlessConstructor>(LifecycleType.Transient))
@@ -50,7 +50,7 @@ namespace IoCContainer.Test
             // Arrange
             const LifecycleType lifecycleType = LifecycleType.Singleton;
             var expectedInstanceBuilder =
-                new SingletonInstanceBuilder<ClassWithParameterlessConstructor>(It.IsAny<IInstanceCreator>());
+                new SingletonInstanceBuilder<ClassWithParameterlessConstructor>(new InstanceCreator());
 
             _instanceBuilderFactory
                 .Setup(i => i.GetInstanceBuilder<ClassWithParameterlessConstructor>(lifecycleType))
@@ -73,13 +73,13 @@ namespace IoCContainer.Test
         {
             // Act
             var expectedInstance = new ClassWithParameterlessConstructor();
-            var instanceBuilder = new Mock<IInstanceBuilder>();
+            var instanceBuilderMock = new Mock<IInstanceBuilder>();
 
-            instanceBuilder
+            instanceBuilderMock
                 .Setup(i => i.BuildInstance())
                 .Returns(expectedInstance);
 
-            _container.Bindings.Add(typeof (ISomeInterface), instanceBuilder.Object);
+            _container.Bindings.Add(typeof (ISomeInterface), instanceBuilderMock.Object);
 
             // Arrange
             var actualInstance = _container.Resolve<ISomeInterface>();

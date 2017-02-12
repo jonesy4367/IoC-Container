@@ -1,5 +1,4 @@
-﻿using System;
-using IoCContainer.InstanceCreators;
+﻿using IoCContainer.InstanceCreators;
 
 namespace IoCContainer.InstanceBuilders
 {
@@ -14,9 +13,7 @@ namespace IoCContainer.InstanceBuilders
 
         public object BuildInstance()
         {
-            //return Activator.CreateInstance(typeof(T));
-
-            return null;
+            return _instanceCreator.CreateInstance<T>();
         }
     }
 }
