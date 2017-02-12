@@ -11,9 +11,9 @@ namespace IoCContainer.InstanceBuilders
             _instanceCreator = instanceCreator;
         }
 
-        public object BuildInstance()
+        public object BuildInstance(params object[] args)
         {
-            return _instanceCreator.CreateInstance<T>();
+            return _instanceCreator.CreateInstance<T>(args);
         }
     }
 }

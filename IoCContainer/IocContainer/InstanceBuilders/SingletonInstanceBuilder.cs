@@ -14,14 +14,14 @@ namespace IoCContainer.InstanceBuilders
             _instanceCreator = instanceCreator;
         }
         
-        public object BuildInstance()
+        public object BuildInstance(params object[] args)
         {
             if (_instance != null)
             {
                 return _instance;
             }
 
-            var instance = _instanceCreator.CreateInstance<T>();
+            var instance = _instanceCreator.CreateInstance<T>(args);
             _instance = (T) instance;
             return instance;
         }

@@ -2,6 +2,6 @@
 {
     public interface IInstanceCreator
     {
-        object CreateInstance<T>();
+        object CreateInstance<T>(params object[] args);
     }
 }

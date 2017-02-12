@@ -14,8 +14,15 @@ namespace IoCContainer.Test.InstanceBuilders
     public class SingletonInstanceBuilderTests
     {
         private class SomeClass { }
+        private class AnotherClass { }
+
+        private class SomeClassWithConstructorArgs
+        {
+            public SomeClassWithConstructorArgs(SomeClass someClass, AnotherClass anotherClass) { }
+        }
 
         private SingletonInstanceBuilder<SomeClass> _singletonInstanceBuilder;
+        private SingletonInstanceBuilder<SomeClassWithConstructorArgs> _constructorArgsSingletonInstanceBuilder;
         private Mock<IInstanceCreator> _instanceCreatorMock;
 
         [SetUp]
@@ -23,6 +30,9 @@ namespace IoCContainer.Test.InstanceBuilders
         {
             _instanceCreatorMock = new Mock<IInstanceCreator>();
             _singletonInstanceBuilder = new SingletonInstanceBuilder<SomeClass>(_instanceCreatorMock.Object);
+
+            _constructorArgsSingletonInstanceBuilder =
+                new SingletonInstanceBuilder<SomeClassWithConstructorArgs>(_instanceCreatorMock.Object);
         }
 
         [Test]
@@ -63,6 +73,27 @@ namespace IoCContainer.Test.InstanceBuilders
 
             // Assert
             Assert.AreSame(instance1, instance2);
+        }
+
+        [Test]
+        public void BuildInstance_ConstructorHasArgs_ReturnsInstance()
+        {
+            // Arrange
+            var someClass = new SomeClass();
+            var anotherClass = new AnotherClass();
+            var expectedInstance = new SomeClassWithConstructorArgs(someClass, anotherClass);
+
+            _instanceCreatorMock
+                .Setup(
+                    i =>
+                        i.CreateInstance<SomeClassWithConstructorArgs>(someClass, anotherClass))
+                .Returns(expectedInstance);
+
+            // Act
+            var actualInstance = _constructorArgsSingletonInstanceBuilder.BuildInstance(someClass, anotherClass);
+
+            // Assert
+            Assert.AreSame(expectedInstance, actualInstance);
         }
     }
 }

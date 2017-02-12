@@ -2,6 +2,6 @@
 {
     public interface IInstanceBuilder
     {
-        object BuildInstance();
+        object BuildInstance(params object[] args);
     }
 }
