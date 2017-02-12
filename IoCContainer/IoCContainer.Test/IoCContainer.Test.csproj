@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="ContainerTests.cs" />
     <Compile Include="InstanceBuilderFactories\InstanceBuilderFactoryTests.cs" />
+    <Compile Include="InstanceBuilders\SingletonInstanceBuilderTests.cs" />
     <Compile Include="InstanceBuilders\TransientInstanceBuilderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

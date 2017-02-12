@@ -21,8 +21,9 @@ namespace IoCContainer.InstanceBuilders
                 return _instance;
             }
 
-            _instance = (T) Activator.CreateInstance(typeof(T));
-            return _instance;
+            var instance = _instanceCreator.CreateInstance<T>();
+            _instance = (T) instance;
+            return instance;
         }
     }
 }
