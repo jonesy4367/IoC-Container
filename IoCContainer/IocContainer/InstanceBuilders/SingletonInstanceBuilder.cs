@@ -13,7 +13,12 @@ namespace IoCContainer.InstanceBuilders
         {
             _instanceCreator = instanceCreator;
         }
-        
+
+        public Type GetInstanceType()
+        {
+            return typeof (T);
+        }
+
         public object BuildInstance(params object[] args)
         {
             if (_instance != null)

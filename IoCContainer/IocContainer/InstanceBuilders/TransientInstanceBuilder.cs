@@ -1,4 +1,5 @@
-﻿using IoCContainer.InstanceCreators;
+﻿using System;
+using IoCContainer.InstanceCreators;
 
 namespace IoCContainer.InstanceBuilders
 {
@@ -9,6 +10,11 @@ namespace IoCContainer.InstanceBuilders
         public TransientInstanceBuilder(IInstanceCreator instanceCreator)
         {
             _instanceCreator = instanceCreator;
+        }
+
+        public Type GetInstanceType()
+        {
+            return typeof (T);
         }
 
         public object BuildInstance(params object[] args)

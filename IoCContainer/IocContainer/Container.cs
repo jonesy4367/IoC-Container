@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using IoCContainer.InstanceBuilderFactories;
 using IoCContainer.InstanceBuilders;
 
@@ -30,10 +31,28 @@ namespace IoCContainer
 
         public T Resolve<T>() where T : class
         {
-            // TODO: handle the type is not in the dictionary
+            return (T) Resolve(typeof (T));
+        }
 
-            var instanceBuilder = Bindings[typeof (T)];
-            return (T) instanceBuilder.BuildInstance();
+        private object Resolve(Type type)
+        {
+            // TODO: handle the type is not in the dictionary
+            var instanceBuilder = Bindings[type];
+            var instanceType = instanceBuilder.GetInstanceType();
+
+            var constructors = instanceType.GetConstructors();
+            var parameters = constructors.First().GetParameters();
+
+            if (!parameters.Any())
+            {
+                return instanceBuilder.BuildInstance();
+            }
+
+            var args = parameters
+                .Select(p => Resolve(p.ParameterType))
+                .ToList();
+
+            return instanceBuilder.BuildInstance(args.ToArray());
         }
     }
 }
