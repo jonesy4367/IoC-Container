@@ -1,0 +1,27 @@
+﻿@model IoCContainer.Web.Models.TestModel
+
+<div>
+    @Html.Label(Model.StaticBusinessData1)<br/>
+    @foreach (var text in Model.StaticBusinessDataLayersData1)
+    {
+        @Html.Label(text)<br/>
+    }
+    <br/><br/>
+    @Html.Label(Model.StaticBusinessData2)<br />
+    @foreach (var text in Model.StaticBusinessDataLayersData2)
+    {
+        @Html.Label(text)<br />
+    }
+    <br /><br />
+    @Html.Label(Model.TransientBusinessData1)<br />
+    @foreach (var text in Model.TransientBusinessDataLayersData1)
+    {
+        @Html.Label(text)<br />
+    }
+    <br /><br />
+    @Html.Label(Model.TransientBusinessData2)<br />
+    @foreach (var text in Model.TransientBusinessDataLayersData2)
+    {
+        @Html.Label(text)<br />
+    }
+</div>

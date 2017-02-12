@@ -6,11 +6,8 @@ namespace IoCContainer.Web.Business
     public class StaticBusiness : IStaticBusiness
     {
         private readonly IStaticData _staticData1;
-
         private readonly IStaticData _staticData2;
-
         private readonly ITransientData _transientData1;
-
         private readonly ITransientData _transientData2;
 
         public StaticBusiness(IStaticData staticData1, IStaticData staticData2, ITransientData transientData1,
@@ -30,7 +27,7 @@ namespace IoCContainer.Web.Business
             _staticData2.SomeData = "staticDataValue2";
 
             _transientData1.SomeData = "transientDataValue1";
-            _transientData1.SomeData = "transientDataValue2";
+            _transientData2.SomeData = "transientDataValue2";
 
             return new List<string>
             {
