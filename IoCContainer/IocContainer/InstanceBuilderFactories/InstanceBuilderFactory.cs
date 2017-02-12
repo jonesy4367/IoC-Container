@@ -3,7 +3,7 @@ using IoCContainer.InstanceBuilders;
 
 namespace IoCContainer.InstanceBuilderFactories
 {
-    public class InstanceBuilderFactory : IInstanceBuilderFactory
+    internal class InstanceBuilderFactory : IInstanceBuilderFactory
     {
         public IInstanceBuilder GetInstanceBuilder<T>(LifecycleType lifecycleType)
         {

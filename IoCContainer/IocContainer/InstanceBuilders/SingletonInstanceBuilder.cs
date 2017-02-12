@@ -2,10 +2,10 @@
 
 namespace IoCContainer.InstanceBuilders
 {
-    public class SingletonInstanceBuilder<T> : IInstanceBuilder
+    internal class SingletonInstanceBuilder<T> : IInstanceBuilder
     {
         private T _instance;
-
+        
         public object BuildInstance()
         {
             if (_instance != null)

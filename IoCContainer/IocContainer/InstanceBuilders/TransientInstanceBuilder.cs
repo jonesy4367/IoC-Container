@@ -2,7 +2,7 @@
 
 namespace IoCContainer.InstanceBuilders
 {
-    public class TransientInstanceBuilder<T> : IInstanceBuilder
+    internal class TransientInstanceBuilder<T> : IInstanceBuilder
     {
         public object BuildInstance()
         {

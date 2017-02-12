@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using IoCContainer.InstanceBuilderFactories;
 using IoCContainer.InstanceBuilders;
 
 namespace IoCContainer
 {
     public class Container
     {
-        private readonly Dictionary<Type, IInstanceBuilder> _bindings;
-        //private readonly TransientInstanceBuilder _transientInstanceFactory;
-        //private readonly SingletonInstanceBuilder _singletonInstanceFactory;
+        internal Dictionary<Type, IInstanceBuilder> Bindings { get; }
 
-        public Container()
+        private readonly IInstanceBuilderFactory _instanceBuilderFactory;
+
+        public Container(IInstanceBuilderFactory instanceBuilderFactory)
         {
-            //_bindings = new Dictionary<Type, BoundImplementation>();
-            //_transientInstanceFactory = new TransientInstanceBuilder();
-            //_singletonInstanceFactory = new SingletonInstanceBuilder();
+            _instanceBuilderFactory = instanceBuilderFactory;
+            Bindings = new Dictionary<Type, IInstanceBuilder>();
         }
 
         public void Register<TBindTo, TBindFrom>() where TBindFrom : TBindTo
@@ -24,28 +24,8 @@ namespace IoCContainer
 
         public void Register<TBindTo, TBindFrom>(LifecycleType lifecycleType) where TBindFrom : TBindTo
         {
-            //IInstanceBuilder instanceFactory;
-
-            //switch (lifecycleType)
-            //{
-            //    case LifecycleType.Transient:
-            //        instanceFactory = _transientInstanceFactory;
-            //        break;
-            //    case LifecycleType.Singleton:
-            //        instanceFactory = _singletonInstanceFactory;
-            //        break;
-            //    // TODO: handle this better
-            //    default:
-            //        throw new Exception();
-            //}
-
-            //var boundImplementation = new BoundImplementation
-            //{
-            //    Type = typeof(TBindFrom),
-            //    InstanceFactory = instanceFactory
-            //};
-
-            //_bindings.Add(typeof(TBindTo), boundImplementation);
+            var instanceBuilder = _instanceBuilderFactory.GetInstanceBuilder<TBindFrom>(lifecycleType);
+            Bindings.Add(typeof (TBindTo), instanceBuilder);
         }
 
         public T Resolve<T>() where T : class

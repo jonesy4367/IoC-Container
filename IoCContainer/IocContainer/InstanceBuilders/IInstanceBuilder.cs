@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IoCContainer.InstanceBuilders
+﻿namespace IoCContainer.InstanceBuilders
 {
     public interface IInstanceBuilder
     {
