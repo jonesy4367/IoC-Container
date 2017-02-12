@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IoCContainer.Exceptions;
 using IoCContainer.InstanceBuilderFactories;
 using IoCContainer.InstanceBuilders;
 
@@ -36,7 +37,11 @@ namespace IoCContainer
 
         private object Resolve(Type type)
         {
-            // TODO: handle the type is not in the dictionary
+            if (!Bindings.ContainsKey(type))
+            {
+                throw new TypeNotRegisteredException($"The type '{type.FullName}' has not been registerd.");
+            }
+            
             var instanceBuilder = Bindings[type];
             var instanceType = instanceBuilder.GetInstanceType();
 

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\TypeNotRegisteredException.cs" />
     <Compile Include="InstanceBuilderFactories\IInstanceBuilderFactory.cs" />
     <Compile Include="InstanceBuilderFactories\InstanceBuilderFactory.cs" />
     <Compile Include="InstanceBuilders\SingletonInstanceBuilder.cs" />

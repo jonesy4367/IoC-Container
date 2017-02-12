@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using IoCContainer.Exceptions;
+using NUnit.Framework;
 using IoCContainer.InstanceBuilderFactories;
 using IoCContainer.InstanceBuilders;
 using IoCContainer.InstanceCreators;
@@ -12,19 +13,19 @@ namespace IoCContainer.Test
         private Container _container;
         private Mock<IInstanceBuilderFactory> _instanceBuilderFactory;
 
-        private interface INoConstructor { }
+        private interface IDefaultConstructorInterface { }
 
         private interface IMiddleLayerInterface { }
 
         private interface ITopLayerInterface { }
 
-        private class ClassWithNoConstructor : INoConstructor { }
+        private class ClassWithDefaultConstructor : IDefaultConstructorInterface { }
 
         private class MiddleLayerClass : IMiddleLayerInterface
         {
-            public INoConstructor Dependency { get; }
+            public IDefaultConstructorInterface Dependency { get; }
 
-            public MiddleLayerClass(INoConstructor dependency)
+            public MiddleLayerClass(IDefaultConstructorInterface dependency)
             {
                 Dependency = dependency;
             }
@@ -54,17 +55,17 @@ namespace IoCContainer.Test
         {
             // Arrange
             var expectedInstanceBuilder =
-                new TransientInstanceBuilder<ClassWithNoConstructor>(new InstanceCreator());
+                new TransientInstanceBuilder<ClassWithDefaultConstructor>(new InstanceCreator());
 
             _instanceBuilderFactory
-                .Setup(i => i.GetInstanceBuilder<ClassWithNoConstructor>(LifecycleType.Transient))
+                .Setup(i => i.GetInstanceBuilder<ClassWithDefaultConstructor>(LifecycleType.Transient))
                 .Returns(expectedInstanceBuilder);
 
             // Act
-            _container.Register<INoConstructor, ClassWithNoConstructor>();
+            _container.Register<IDefaultConstructorInterface, ClassWithDefaultConstructor>();
 
             // Assert
-            var actualInstanceBuilder = _container.Bindings[typeof(INoConstructor)];
+            var actualInstanceBuilder = _container.Bindings[typeof(IDefaultConstructorInterface)];
             Assert.AreSame(expectedInstanceBuilder, actualInstanceBuilder);
         }
 
@@ -74,17 +75,17 @@ namespace IoCContainer.Test
             // Arrange
             const LifecycleType lifecycleType = LifecycleType.Singleton;
             var expectedInstanceBuilder =
-                new SingletonInstanceBuilder<ClassWithNoConstructor>(new InstanceCreator());
+                new SingletonInstanceBuilder<ClassWithDefaultConstructor>(new InstanceCreator());
 
             _instanceBuilderFactory
-                .Setup(i => i.GetInstanceBuilder<ClassWithNoConstructor>(lifecycleType))
+                .Setup(i => i.GetInstanceBuilder<ClassWithDefaultConstructor>(lifecycleType))
                 .Returns(expectedInstanceBuilder);
 
             // Act
-            _container.Register<INoConstructor, ClassWithNoConstructor>(lifecycleType);
+            _container.Register<IDefaultConstructorInterface, ClassWithDefaultConstructor>(lifecycleType);
 
             // Assert
-            var actualInstanceBuilder = _container.Bindings[typeof(INoConstructor)];
+            var actualInstanceBuilder = _container.Bindings[typeof(IDefaultConstructorInterface)];
             Assert.AreSame(expectedInstanceBuilder, actualInstanceBuilder);
         }
 
@@ -96,7 +97,7 @@ namespace IoCContainer.Test
         public void Resolve_NoConstructor_ReturnsInstance()
         {
             // Act
-            var expectedInstance = new ClassWithNoConstructor();
+            var expectedInstance = new ClassWithDefaultConstructor();
             var instanceBuilderMock = new Mock<IInstanceBuilder>();
 
             instanceBuilderMock
@@ -105,12 +106,12 @@ namespace IoCContainer.Test
 
             instanceBuilderMock
                 .Setup(i => i.GetInstanceType())
-                .Returns(typeof (ClassWithNoConstructor));
+                .Returns(typeof (ClassWithDefaultConstructor));
 
-            _container.Bindings.Add(typeof (INoConstructor), instanceBuilderMock.Object);
+            _container.Bindings.Add(typeof (IDefaultConstructorInterface), instanceBuilderMock.Object);
 
             // Arrange
-            var actualInstance = _container.Resolve<INoConstructor>();
+            var actualInstance = _container.Resolve<IDefaultConstructorInterface>();
 
             // Assert
             Assert.AreSame(expectedInstance, actualInstance);
@@ -120,7 +121,7 @@ namespace IoCContainer.Test
         public void Resolve_ConstructorHasParameters_ReturnsInstance()
         {
             // Arrange
-            var expectedBottomLayerClass = new ClassWithNoConstructor();
+            var expectedBottomLayerClass = new ClassWithDefaultConstructor();
             var expectedMiddleLayerClass = new MiddleLayerClass(expectedBottomLayerClass);
             var expectedTopLayerClass = new TopLayerClass(expectedMiddleLayerClass);
 
@@ -134,7 +135,7 @@ namespace IoCContainer.Test
 
             bottomLayerBuilderMock
                 .Setup(b => b.GetInstanceType())
-                .Returns(typeof (ClassWithNoConstructor));
+                .Returns(typeof (ClassWithDefaultConstructor));
 
             middleLayerBuilderMock
                 .Setup(m => m.BuildInstance(It.Is<object[]>(o => o.Length == 1 && o[0] == expectedBottomLayerClass)))
@@ -154,7 +155,7 @@ namespace IoCContainer.Test
 
             _container.Bindings.Add(typeof (ITopLayerInterface), topLayerBuilderMock.Object);
             _container.Bindings.Add(typeof (IMiddleLayerInterface), middleLayerBuilderMock.Object);
-            _container.Bindings.Add(typeof (INoConstructor), bottomLayerBuilderMock.Object);
+            _container.Bindings.Add(typeof (IDefaultConstructorInterface), bottomLayerBuilderMock.Object);
 
             // Act
             var actualTopLayerClass = _container.Resolve<ITopLayerInterface>();
@@ -167,6 +168,19 @@ namespace IoCContainer.Test
 
             var actualBottomLayerClass = ((MiddleLayerClass) actualMiddleLayerClass).Dependency;
             Assert.AreSame(expectedBottomLayerClass, actualBottomLayerClass);
+        }
+
+        [Test]
+        public void Resolve_TypeIsNotRegistered_ThrowsTypeNotRegisteredException()
+        {
+            // Arrange
+            var expectedMessage = $"The type '{typeof (IDefaultConstructorInterface).FullName}' has not been registerd.";
+
+            // Act, Assert
+            var exception = Assert.Throws<TypeNotRegisteredException>(
+                delegate { _container.Resolve<IDefaultConstructorInterface>(); });
+
+            Assert.AreEqual(expectedMessage, exception.Message);
         }
 
         #endregion
