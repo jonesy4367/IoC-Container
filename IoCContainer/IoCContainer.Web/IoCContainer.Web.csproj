@@ -121,7 +121,16 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Bootstrapper\Bootstrapper.cs" />
+    <Compile Include="Business\IStaticBusiness.cs" />
+    <Compile Include="Business\ITransientBusiness.cs" />
+    <Compile Include="Business\StaticBusiness.cs" />
+    <Compile Include="Business\TransientBusiness.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Data\IStaticData.cs" />
+    <Compile Include="Data\ITransientData.cs" />
+    <Compile Include="Data\StaticData.cs" />
+    <Compile Include="Data\TransientData.cs" />
     <Compile Include="Factories\CustomControllerFactory.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
