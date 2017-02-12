@@ -4,7 +4,7 @@ using IoCContainer.InstanceCreators;
 
 namespace IoCContainer.InstanceBuilderFactories
 {
-    internal class InstanceBuilderFactory : IInstanceBuilderFactory
+    public class InstanceBuilderFactory : IInstanceBuilderFactory
     {
         public IInstanceBuilder GetInstanceBuilder<T>(LifecycleType lifecycleType)
         {
