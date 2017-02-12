@@ -2,6 +2,7 @@
 using System.Linq;
 using IoCContainer.InstanceBuilderFactories;
 using IoCContainer.InstanceBuilders;
+using IoCContainer.InstanceCreators;
 using Moq;
 
 namespace IoCContainer.Test
@@ -13,7 +14,7 @@ namespace IoCContainer.Test
         private Mock<IInstanceBuilderFactory> _instanceBuilderFactory;
 
         private interface ISomeInterface { }
-        private class SomeClass : ISomeInterface { }
+        private class ClassWithParameterlessConstructor : ISomeInterface { }
         
         [SetUp]
         public void Setup()
@@ -25,18 +26,38 @@ namespace IoCContainer.Test
         #region Register() Tests
 
         [Test]
-        public void Register_TypeIsRegistered()
+        public void Register_LifecycleTypeIsNotProvided_TypeIsRegistered()
         {
             // Arrange
-            const LifecycleType lifecycleType = LifecycleType.Singleton;
-            var expectedInstanceBuilder = new TransientInstanceBuilder<SomeClass>();
+            var expectedInstanceBuilder =
+                new TransientInstanceBuilder<ClassWithParameterlessConstructor>(It.IsAny<IInstanceCreator>());
 
             _instanceBuilderFactory
-                .Setup(i => i.GetInstanceBuilder<SomeClass>(lifecycleType))
+                .Setup(i => i.GetInstanceBuilder<ClassWithParameterlessConstructor>(LifecycleType.Transient))
                 .Returns(expectedInstanceBuilder);
 
             // Act
-            _container.Register<ISomeInterface, SomeClass>(lifecycleType);
+            _container.Register<ISomeInterface, ClassWithParameterlessConstructor>();
+
+            // Assert
+            var actualInstanceBuilder = _container.Bindings[typeof(ISomeInterface)];
+            Assert.AreSame(expectedInstanceBuilder, actualInstanceBuilder);
+        }
+
+        [Test]
+        public void Register_LifecycleTypeIsProvided_TypeIsRegistered()
+        {
+            // Arrange
+            const LifecycleType lifecycleType = LifecycleType.Singleton;
+            var expectedInstanceBuilder =
+                new SingletonInstanceBuilder<ClassWithParameterlessConstructor>(It.IsAny<IInstanceCreator>());
+
+            _instanceBuilderFactory
+                .Setup(i => i.GetInstanceBuilder<ClassWithParameterlessConstructor>(lifecycleType))
+                .Returns(expectedInstanceBuilder);
+
+            // Act
+            _container.Register<ISomeInterface, ClassWithParameterlessConstructor>(lifecycleType);
 
             // Assert
             var actualInstanceBuilder = _container.Bindings[typeof(ISomeInterface)];
@@ -45,47 +66,28 @@ namespace IoCContainer.Test
 
         #endregion
 
-        //[Test]
-        //public void Resolve_DefaultLifeCycleParameterlessConstructor_ReturnsInstance()
-        //{
-        //    // Arrange
-        //    _iocContainer.Register<IBoundTo, ParameterlessTarget>();
+        #region Resolve() Tests
 
-        //    // Act
-        //    var result1 = _iocContainer.Resolve<IBoundTo>();
-        //    var result2 = _iocContainer.Resolve<IBoundTo>();
+        [Test]
+        public void Resolve_ConstructorIsParameterless_ReturnsInstance()
+        {
+            // Act
+            var expectedInstance = new ClassWithParameterlessConstructor();
+            var instanceBuilder = new Mock<IInstanceBuilder>();
 
-        //    // Assert
-        //    Assert.IsInstanceOf<ParameterlessTarget>(result1);
-        //    Assert.IsInstanceOf<ParameterlessTarget>(result2);
-        //    Assert.AreNotSame(result1, result2);
-        //}
+            instanceBuilder
+                .Setup(i => i.BuildInstance())
+                .Returns(expectedInstance);
 
-        //[Test]
-        //[TestCase(LifecycleType.Transient)]
-        //[TestCase(LifecycleType.Singleton)]
-        //public void Resolve_ParameterlessConstructor_ReturnsInstance(LifecycleType lifecycleType)
-        //{
-        //    // Arrange
-        //    _iocContainer.Register<IBoundTo, ParameterlessTarget>(lifecycleType);
+            _container.Bindings.Add(typeof (ISomeInterface), instanceBuilder.Object);
 
-        //    // Act
-        //    var result1 = _iocContainer.Resolve<IBoundTo>();
-        //    var result2 = _iocContainer.Resolve<IBoundTo>();
+            // Arrange
+            var actualInstance = _container.Resolve<ISomeInterface>();
 
-        //    // Assert
-        //    Assert.IsInstanceOf<ParameterlessTarget>(result1);
-        //    Assert.IsInstanceOf<ParameterlessTarget>(result2);
+            // Assert
+            Assert.AreSame(expectedInstance, actualInstance);
+        }
 
-        //    switch (lifecycleType)
-        //    {
-        //        case LifecycleType.Transient:
-        //            Assert.AreNotSame(result1, result2);
-        //            break;
-        //        case LifecycleType.Singleton:
-        //            Assert.AreSame(result1, result2);
-        //            break;
-        //    }
-        //}
+        #endregion
     }
 }

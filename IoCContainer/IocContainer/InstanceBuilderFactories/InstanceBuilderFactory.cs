@@ -1,5 +1,6 @@
 ﻿using System;
 using IoCContainer.InstanceBuilders;
+using IoCContainer.InstanceCreators;
 
 namespace IoCContainer.InstanceBuilderFactories
 {
@@ -10,9 +11,9 @@ namespace IoCContainer.InstanceBuilderFactories
             switch (lifecycleType)
             {
                 case LifecycleType.Transient:
-                    return new TransientInstanceBuilder<T>();
+                    return new TransientInstanceBuilder<T>(new InstanceCreator());
                 case LifecycleType.Singleton:
-                    return new SingletonInstanceBuilder<T>();
+                    return new SingletonInstanceBuilder<T>(new InstanceCreator());
                 // TODO: handle this better
                 default:
                     throw new Exception();

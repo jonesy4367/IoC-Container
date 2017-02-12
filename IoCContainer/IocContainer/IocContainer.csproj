@@ -40,13 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoundImplementation.cs" />
     <Compile Include="InstanceBuilderFactories\IInstanceBuilderFactory.cs" />
     <Compile Include="InstanceBuilderFactories\InstanceBuilderFactory.cs" />
     <Compile Include="InstanceBuilders\SingletonInstanceBuilder.cs" />
     <Compile Include="InstanceBuilders\TransientInstanceBuilder.cs" />
     <Compile Include="InstanceBuilders\IInstanceBuilder.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="InstanceCreators\IInstanceCreator.cs" />
+    <Compile Include="InstanceCreators\InstanceCreator.cs" />
     <Compile Include="LifecycleType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

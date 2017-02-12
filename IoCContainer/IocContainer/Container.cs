@@ -7,7 +7,7 @@ namespace IoCContainer
 {
     public class Container
     {
-        internal Dictionary<Type, IInstanceBuilder> Bindings { get; }
+        internal Dictionary<Type, IInstanceBuilder> Bindings { get; set; }
 
         private readonly IInstanceBuilderFactory _instanceBuilderFactory;
 
@@ -19,7 +19,7 @@ namespace IoCContainer
 
         public void Register<TBindTo, TBindFrom>() where TBindFrom : TBindTo
         {
-            //Register<TBindTo, TBindFrom>(LifecycleType.Transient);
+            Register<TBindTo, TBindFrom>(LifecycleType.Transient);
         }
 
         public void Register<TBindTo, TBindFrom>(LifecycleType lifecycleType) where TBindFrom : TBindTo
@@ -30,14 +30,10 @@ namespace IoCContainer
 
         public T Resolve<T>() where T : class
         {
-            //var bindToType = typeof (T);
-            //var boundImplementation = _bindings[bindToType];
-            //var boundType = boundImplementation.Type;
-            //var instanceFactory = boundImplementation.InstanceFactory;
+            // TODO: handle the type is not in the dictionary
 
-            //return (T) instanceFactory.BuildInstance(boundType);
-
-            return null;
+            var instanceBuilder = Bindings[typeof (T)];
+            return (T) instanceBuilder.BuildInstance();
         }
     }
 }
