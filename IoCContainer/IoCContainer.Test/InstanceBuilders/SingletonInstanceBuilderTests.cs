@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IoCContainer.InstanceBuilders;
+﻿using IoCContainer.InstanceBuilders;
 using IoCContainer.InstanceCreators;
 using Moq;
 using NUnit.Framework;
@@ -18,7 +13,9 @@ namespace IoCContainer.Test.InstanceBuilders
 
         private class SomeClassWithConstructorArgs
         {
+            // ReSharper disable UnusedParameter.Local
             public SomeClassWithConstructorArgs(SomeClass someClass, AnotherClass anotherClass) { }
+            // ReSharper restore UnusedParameter.Local
         }
 
         private SingletonInstanceBuilder<SomeClass> _singletonInstanceBuilder;
