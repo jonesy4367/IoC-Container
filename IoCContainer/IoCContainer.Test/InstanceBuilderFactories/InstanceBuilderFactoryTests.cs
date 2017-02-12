@@ -44,7 +44,7 @@ namespace IoCContainer.Test.InstanceBuilderFactories
             var expectedMessage = $"Could not find an InstanceBuilder for {lifecycleType}";
 
             // Act, Assert
-            var exception = Assert.Throws<ArgumentException>(delegate
+            var exception = Assert.Throws<NotSupportedException>(delegate
             {
                 _instanceBuilderFactory.GetInstanceBuilder<string>(lifecycleType);
             });

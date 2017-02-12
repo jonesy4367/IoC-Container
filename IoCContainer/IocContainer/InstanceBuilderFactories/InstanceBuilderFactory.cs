@@ -15,7 +15,7 @@ namespace IoCContainer.InstanceBuilderFactories
                 case LifecycleType.Singleton:
                     return new SingletonInstanceBuilder<T>(new InstanceCreator());
                 default:
-                    throw new ArgumentException($"Could not find an InstanceBuilder for {lifecycleType}");
+                    throw new NotSupportedException($"Could not find an InstanceBuilder for {lifecycleType}");
             }
         }
     }
