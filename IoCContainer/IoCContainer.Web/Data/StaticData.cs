@@ -2,6 +2,6 @@
 {
     public class StaticData : IStaticData
     {
-        public string SomeData { get; set; }
+        public string SomeCoolData { get; set; }
     }
 }

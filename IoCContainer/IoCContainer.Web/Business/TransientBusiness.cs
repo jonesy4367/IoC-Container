@@ -23,16 +23,16 @@ namespace IoCContainer.Web.Business
 
         public List<string> GetFromDataLayer()
         {
-            _staticData1.SomeData = "staticDataValue1";
-            _staticData2.SomeData = "staticDataValue2";
+            _staticData1.SomeCoolData = "staticDataValue1";
+            _staticData2.SomeCoolData = "staticDataValue2";
 
             _transientData1.SomeData = "transientDataValue1";
             _transientData2.SomeData = "transientDataValue2";
 
             return new List<string>
             {
-                $"_staticData1 => {_staticData1.SomeData}",
-                $"_staticData2 => {_staticData2.SomeData}",
+                $"_staticData1 => {_staticData1.SomeCoolData}",
+                $"_staticData2 => {_staticData2.SomeCoolData}",
                 $"_transientData1 => {_transientData1.SomeData}",
                 $"_transientData2 => {_transientData2.SomeData}"
             };

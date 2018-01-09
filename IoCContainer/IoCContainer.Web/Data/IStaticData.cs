@@ -2,6 +2,6 @@
 {
     public interface IStaticData
     {
-        string SomeData { get; set; }
+        string SomeCoolData { get; set; }
     }
 }
